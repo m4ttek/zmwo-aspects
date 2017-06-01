@@ -12,9 +12,9 @@ import telecom.Customer;
  */
 public aspect Policeman {
 
-	pointcut policemancut(): adviceexecution() && !within(Policeman);
+	pointcut policemancut(): set(String Customer.password) && !within(Customer);
 	
-	String around(Customer callingCustomer) : policemancut() && args(callingCustomer) {
-		return callingCustomer.getPassword();
+	Object around(String hackedPass) : policemancut() && args(hackedPass) {
+		return null;
 	}
 }

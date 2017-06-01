@@ -14,9 +14,9 @@ import telecom.Customer;
  */
 public privileged aspect Hacker {
 	
-	pointcut hackercut(): call(String *.getCustomerPassword(Customer));
+	pointcut hackercut(): cflow(adviceexecution()) && get(String Customer.password);
 	
-	String around(Customer callingCustomer) : hackercut() && args(callingCustomer) {
-		return "hacked!!";
+	before(Customer customer) : hackercut() && target(customer) {
+		customer.password = "hacked!!";
 	}
 }

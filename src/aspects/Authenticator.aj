@@ -26,7 +26,7 @@ public aspect Authenticator {
 
 	pointcut authenticatorcut(): call(* Customer.call(..));
 	
-	// jeśli uwierzytelnienie użytkownik nie powiedzie się, to zwracany jest wskazanie na null
+	// jeśli uwierzytelnienie użytkownik nie powiedzie się, to zwracane jest wskazanie na null
 	Call around(Customer callingCustomer, Customer receiver) : authenticatorcut() && target(callingCustomer) && args(receiver) {
 		Call callObject = null;
 		
@@ -37,10 +37,13 @@ public aspect Authenticator {
 		return callObject;
 	}
 	
+	// symuluje pobranie hasła i przeprowadza uwierzytelenie klienta
 	private boolean authenticateCaller(Customer callingCustomer) {
-		return callingCustomer.getPassword().equals(getCustomerPassword(callingCustomer));
+		String passwordInput = callingCustomer.getPassword();
+		return passwordInput.equals(getCustomerPassword(callingCustomer));
 	}
 	
+	// pobiera z zewnętrznego pliku zapisane hasło
 	private static String getCustomerPassword(Customer callingCustomer) {
 		try (Scanner scanner = new Scanner(new File("passwords.txt"))) {
 			scanner.useDelimiter("\n");
